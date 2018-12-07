@@ -3,6 +3,8 @@
 #include "time.h"
 
 void DisplayMenu();
+char GetRandomCharacter();
+int GetRandomNumber(int underBound, int upperBound);
 
 typedef struct Person
 {
@@ -58,6 +60,8 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+
+// Author: David
 void DisplayMenu()
 {
 	printf("---------- LinkedList by David H. and Yannick F. ----------\n");
