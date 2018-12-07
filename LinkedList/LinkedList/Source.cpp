@@ -1,4 +1,6 @@
-#include <stdio.h>
+#include "stdio.h"
+#include "stdlib.h"
+#include "time.h"
 
 typedef struct Person
 {
@@ -10,7 +12,7 @@ typedef struct Person
 
 int main(int argc, char* argv[]) 
 {
-
+	srand((unsigned)time(NULL));
 
 	return 0;
 }
