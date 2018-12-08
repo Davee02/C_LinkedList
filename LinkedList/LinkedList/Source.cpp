@@ -2,10 +2,6 @@
 #include "stdlib.h"
 #include "time.h"
 
-void DisplayMenu();
-char GetRandomCharacter();
-int GetRandomNumber(int underBound, int upperBound);
-
 typedef struct Person
 {
 	char Firstname[40];
@@ -13,6 +9,15 @@ typedef struct Person
 	int Birthyear;
 	struct Person* pNext;
 } Person;
+
+void DisplayMenu();
+char GetRandomCharacter();
+int GetRandomNumber(int underBound, int upperBound);
+Person* Create(int elementCount);
+Person* Dispose(Person* pHead);
+Person* Remove(char firstName[], char lastName[]);
+Person* Sort(Person* pHead);
+void Output(Person* pHead);
 
 int main(int argc, char* argv[]) 
 {
