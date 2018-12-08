@@ -79,3 +79,15 @@ void DisplayMenu()
 	printf("-1) Quit program\n");
 	printf("------------------------------------------------------------------------\n");
 }
+
+// Author: David
+char GetRandomCharacter()
+{
+	return GetRandomNumber('A', 'Z');
+}
+
+// Author: David
+int GetRandomNumber(int underBound, int upperBound)
+{
+	return rand() % (upperBound + 1 - underBound) + underBound;
+}
