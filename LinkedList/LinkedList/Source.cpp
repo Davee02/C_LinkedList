@@ -14,6 +14,7 @@ void DisplayMenu();
 char GetRandomCharacter();
 int GetRandomNumber(int underBound, int upperBound);
 Person* Create(int elementCount);
+Person* CreateNewPerson();
 Person* Dispose(Person* pHead);
 Person* Remove(char firstName[], char lastName[]);
 Person* Sort(Person* pHead);
@@ -21,6 +22,7 @@ void Output(Person* pHead);
 
 int main(int argc, char* argv[]) 
 {
+	Person* pHead = Create(1);
 	srand((unsigned)time(NULL));
 	int command = 0;
 
@@ -90,4 +92,31 @@ char GetRandomCharacter()
 int GetRandomNumber(int underBound, int upperBound)
 {
 	return rand() % (upperBound + 1 - underBound) + underBound;
+}
+
+// Author: David
+Person* Create(int elementCount)
+{
+	Person* pHead = NULL;
+
+	for (int i = 0; i < elementCount; i++)
+	{
+		Person* pHeadOld = pHead;
+		pHead = CreateNewPerson();
+		pHead->pNext = pHeadOld;
+	}
+
+	return pHead;
+}
+
+// Author: David
+Person* CreateNewPerson()
+{
+	Person* pNew = (Person*)malloc(sizeof(Person));
+	pNew->Birthyear = GetRandomNumber(1900, 2018);
+	pNew->Firstname[0] = GetRandomCharacter();
+	pNew->Lastname[0] = GetRandomCharacter();
+	pNew->pNext = NULL;
+
+	return pNew;
 }
