@@ -22,15 +22,16 @@ void Output(Person* pHead);
 
 int main(int argc, char* argv[]) 
 {
-	Person* pHead = Create(1);
 	srand((unsigned)time(NULL));
+	Person* pHead = Create(1);
 	int command = 0;
 
 	DisplayMenu();
 	while(true)
 	{
 		printf("Please the command you want to execute(0-6, -1 to quit):\n");
-		scanf_s("%d", &command);
+		scanf("%d", &command);
+		fflush(stdin);
 		if (command == -1)
 			break;
 
