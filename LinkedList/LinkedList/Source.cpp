@@ -15,7 +15,7 @@ char GetRandomCharacter();
 int GetRandomNumber(int underBound, int upperBound);
 Person* Create(int elementCount);
 Person* CreateNewPerson();
-Person* Dispose(Person* pHead);
+void Dispose(Person* pHead);
 Person* Remove(char firstName[], char lastName[]);
 Person* Sort(Person* pHead);
 void Output(Person* pHead);
@@ -120,4 +120,24 @@ Person* CreateNewPerson()
 	pNew->pNext = NULL;
 
 	return pNew;
+}
+
+void Dispose(Person* pHead)
+{
+
+}
+
+Person* Remove(char firstName[], char lastName[])
+{
+	return NULL;
+}
+
+Person* Sort(Person* pHead)
+{
+	return NULL;
+}
+
+void Output(Person* pHead)
+{
+	
 }
