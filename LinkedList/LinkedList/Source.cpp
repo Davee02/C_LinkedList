@@ -7,27 +7,27 @@ typedef struct Person
 	char Firstname[40];
 	char Lastname[40];
 	int Birthyear;
-	struct Person* pNext;
+	struct Person *pNext;
 } Person;
 
 void DisplayMenu();
 char GetRandomCharacter();
 int GetRandomNumber(int underBound, int upperBound);
-Person* Create(int elementCount);
-Person* CreateNewPerson();
-void Dispose(Person* pHead);
-Person* Remove(char firstName[], char lastName[]);
-Person* Sort(Person* pHead);
-void Output(Person* pHead);
+Person *Create(int elementCount);
+Person *CreateNewPerson();
+void Dispose(Person *pHead);
+Person *Remove(char firstName[], char lastName[]);
+Person *Sort(Person *pHead);
+void Output(Person *pHead);
 
-int main(int argc, char* argv[]) 
+int main(int argc, char *argv[])
 {
 	srand((unsigned)time(NULL));
-	Person* pHead = Create(1);
+	Person *pHead = Create(1);
 	int command = 0;
 
 	DisplayMenu();
-	while(true)
+	while (true)
 	{
 		printf("Please the command you want to execute(0-6, -1 to quit):\n");
 		scanf("%d", &command);
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 		if (command == -1)
 			break;
 
-		switch(command)
+		switch (command)
 		{
 		case 0:
 			DisplayMenu();
@@ -52,20 +52,35 @@ int main(int argc, char* argv[])
 		break;
 
 		case 2:
-			break;
+		{
+			// Code here
+		}
+		break;
 
 		case 3:
-			break;
+		{
+			// Code here
+		}
+		break;
 
 		case 4:
-			break;
+		{
+			// Code here
+		}
+		break;
 
 		case 5:
-			break;
+		{
+			// Code here
+		}
+		break;
 
 		case 6:
-			break;
-
+		{
+			// Code here
+		}
+		break;
+		
 		default:
 			DisplayMenu();
 			break;
@@ -75,7 +90,6 @@ int main(int argc, char* argv[])
 	Dispose(pHead);
 	return 0;
 }
-
 
 // Author: David
 void DisplayMenu()
@@ -104,13 +118,13 @@ int GetRandomNumber(int underBound, int upperBound)
 }
 
 // Author: David
-Person* Create(int elementCount)
+Person *Create(int elementCount)
 {
-	Person* pHead = NULL;
+	Person *pHead = NULL;
 
 	for (int i = 0; i < elementCount; i++)
 	{
-		Person* pHeadOld = pHead;
+		Person *pHeadOld = pHead;
 		pHead = CreateNewPerson();
 		pHead->pNext = pHeadOld;
 	}
@@ -119,9 +133,9 @@ Person* Create(int elementCount)
 }
 
 // Author: David
-Person* CreateNewPerson()
+Person *CreateNewPerson()
 {
-	Person* pNew = (Person*)malloc(sizeof(Person));
+	Person *pNew = (Person *)malloc(sizeof(Person));
 	pNew->Birthyear = GetRandomNumber(1900, 2018);
 	pNew->Firstname[0] = GetRandomCharacter();
 	pNew->Firstname[1] = '\0';
@@ -132,22 +146,20 @@ Person* CreateNewPerson()
 	return pNew;
 }
 
-void Dispose(Person* pHead)
+void Dispose(Person *pHead)
 {
-
 }
 
-Person* Remove(char firstName[], char lastName[])
+Person *Remove(char firstName[], char lastName[])
 {
 	return NULL;
 }
 
-Person* Sort(Person* pHead)
+Person *Sort(Person *pHead)
 {
 	return NULL;
 }
 
-void Output(Person* pHead)
+void Output(Person *pHead)
 {
-	
 }
