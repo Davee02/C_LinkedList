@@ -42,7 +42,14 @@ int main(int argc, char* argv[])
 			break;
 
 		case 1:
-			break;
+		{
+			printf("How many people do you want to create?");
+			int numberOfElements = 0;
+			scanf("%d", &numberOfElements);
+			fflush(stdin);
+			pHead = Create(numberOfElements);
+		}
+		break;
 
 		case 2:
 			break;
@@ -65,6 +72,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	Dispose(pHead);
 	return 0;
 }
 
@@ -116,7 +124,9 @@ Person* CreateNewPerson()
 	Person* pNew = (Person*)malloc(sizeof(Person));
 	pNew->Birthyear = GetRandomNumber(1900, 2018);
 	pNew->Firstname[0] = GetRandomCharacter();
+	pNew->Firstname[1] = '\0';
 	pNew->Lastname[0] = GetRandomCharacter();
+	pNew->Lastname[1] = '\0';
 	pNew->pNext = NULL;
 
 	return pNew;
