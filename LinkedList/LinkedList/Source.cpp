@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "time.h"
+#include "string.h"
 
 typedef struct Person
 {
@@ -15,8 +16,8 @@ char GetRandomCharacter();
 int GetRandomNumber(int underBound, int upperBound);
 Person *Create(int elementCount);
 Person *CreateNewPerson();
-void Dispose(Person *pHead);
-Person *Remove(char firstName[], char lastName[]);
+Person *Dispose(Person *pHead);
+Person *Remove(Person *pHead, char firstName[], char lastName[]);
 Person *Sort(Person *pHead);
 void Output(Person *pHead);
 
@@ -32,7 +33,7 @@ int main(int argc, char *argv[])
 	{
 		printf("Please write the command you want to execute(0-6, -1 to quit):\n");
 		scanf("%d", &command);
-		fflush(stdin);
+		fgetchar();
 		if (command == -1)
 			break;
 
@@ -47,26 +48,33 @@ int main(int argc, char *argv[])
 			printf("How many people do you want to create? ");
 			int numberOfElements = 0;
 			scanf("%d", &numberOfElements);
-			fflush(stdin);
+			fgetchar();
 			pHead = Create(numberOfElements);
 		}
 		break;
 
 		case 2:
 		{
-			// Delete List
+			pHead = Dispose(pHead);
 		}
 		break;
 
 		case 3:
 		{
-			// Delete person by first- and lastname
+			char firstName[40], lastName[40];
+			printf("What's the firstname of the person to be deleted? ");
+			fgets(firstName, sizeof(firstName), stdin);
+
+			printf("What's the lastname of the person to be deleted? ");
+			fgets(lastName, sizeof(lastName), stdin);
+
+			pHead = Remove(pHead, strtok(firstName, "\n"), strtok(lastName, "\n"));
 		}
 		break;
 
 		case 4:
 		{
-			// Sort list
+			pHead = Sort(pHead);
 		}
 		break;
 
@@ -141,13 +149,26 @@ Person *CreateNewPerson()
 	return pNew;
 }
 
-void Dispose(Person *pHead)
-{
-}
-
-Person *Remove(char firstName[], char lastName[])
+Person *Dispose(Person *pHead)
 {
 	return NULL;
+}
+
+Person *Remove(Person *pHead, char firstName[], char lastName[])
+{
+	if(firstName == NULL || lastName == NULL)
+		return pHead;
+
+	for (Person *pTmp = pHead; pTmp != NULL; pTmp = pTmp->pNext)
+	{
+		if(strcmp(firstName, pTmp->Firstname) == 0 && 
+			strcmp(lastName, pTmp->Lastname) == 0)
+		{
+			printf("Found matching person\n");
+		}
+	}
+
+	return pHead;
 }
 
 Person *Sort(Person *pHead)
@@ -158,7 +179,7 @@ Person *Sort(Person *pHead)
 void Output(Person *pHead)
 {
 	int i = 1;
-	for (Person *pTmp = pHead; pTmp != nullptr; pTmp = pTmp->pNext, i++)
+	for (Person *pTmp = pHead; pTmp != NULL; pTmp = pTmp->pNext, i++)
 	{
 		printf("Person #%i: %s %s (%i)\n", i, pTmp->Firstname, pTmp->Lastname, pTmp->Birthyear);
 	}
