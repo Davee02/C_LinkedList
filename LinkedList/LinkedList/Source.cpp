@@ -170,9 +170,18 @@ Person *CreateNewPerson()
 }
 
 // This function takes the pointer to first node of a linked-list and two strings as a parameter
-// This function deletes all peoplem from the list and frees the memory
+// This function deletes all people from the list and frees the memory
 Person *Dispose(Person *pHead)
 {
+	Person *pTmp = pHead;
+
+	while (pTmp != NULL)
+	{
+		Person *pNextElement = pTmp;
+		pTmp = pTmp->pNext;
+		free(pNextElement);
+	}
+
 	return NULL;
 }
 
@@ -183,15 +192,18 @@ Person *Remove(Person *pHead, char firstName[], char lastName[])
 	if (firstName == NULL || lastName == NULL)
 		return pHead;
 
+	int deleteCounter;
 	for (Person *pTmp = pHead; pTmp != NULL; pTmp = pTmp->pNext)
 	{
 		if (strcmp(firstName, pTmp->Firstname) == 0 &&
 			strcmp(lastName, pTmp->Lastname) == 0)
 		{
-			printf("Found matching person\n");
 			pHead = Remove(pHead, pTmp);
+			deleteCounter++;
 		}
 	}
+
+	printf("%d %s %s deleted\n\n", deleteCounter, deleteCounter > 1 ? "people" : "person", deleteCounter > 1 ? "were" : "was");
 
 	return pHead;
 }
@@ -250,7 +262,7 @@ Person *Remove(Person *pHead, Person *pToDelete)
 	else
 	{
 		Person *pTmp = pHead;
-		
+
 		// Traverse to the specified element
 		while (pTmp->pNext != pToDelete)
 			pTmp = pTmp->pNext;
