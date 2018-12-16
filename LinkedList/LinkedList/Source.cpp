@@ -18,6 +18,7 @@ Person *Create(int elementCount);
 Person *CreateNewPerson();
 Person *Dispose(Person *pHead);
 Person *Remove(Person *pHead, char firstName[], char lastName[]);
+Person *Remove(Person *pHead, Person *pToDelete);
 Person *Sort(Person *pHead);
 void Output(Person *pHead);
 
@@ -179,15 +180,16 @@ Person *Dispose(Person *pHead)
 // This function removes all people with the provided first- and lastname from the list
 Person *Remove(Person *pHead, char firstName[], char lastName[])
 {
-	if(firstName == NULL || lastName == NULL)
+	if (firstName == NULL || lastName == NULL)
 		return pHead;
 
 	for (Person *pTmp = pHead; pTmp != NULL; pTmp = pTmp->pNext)
 	{
-		if(strcmp(firstName, pTmp->Firstname) == 0 && 
+		if (strcmp(firstName, pTmp->Firstname) == 0 &&
 			strcmp(lastName, pTmp->Lastname) == 0)
 		{
 			printf("Found matching person\n");
+			pHead = Remove(pHead, pTmp);
 		}
 	}
 
@@ -211,4 +213,50 @@ void Output(Person *pHead)
 	{
 		printf("Person #%i: %s %s (%i)\n", i, pTmp->Firstname, pTmp->Lastname, pTmp->Birthyear);
 	}
+}
+
+// This function takes the pointer to first node of a linked-list and the pointer to the to be removed element as a parameter
+// This function removes the provided person from the list
+Person *Remove(Person *pHead, Person *pToDelete)
+{
+	// If the start-point of the list is NULL, return NULL
+	if (pHead == NULL)
+	{
+		return NULL;
+	}
+	// If the element, which should be removed, is NULL, change nothing
+	if (pToDelete == NULL)
+	{
+		return pHead;
+	}
+
+	// When the start-point equals the to-be-deleted-element, the to-be-deleted-element is the first element in the list
+	if (pHead == pToDelete)
+	{
+		pHead = pHead->pNext;
+	}
+	// When the next element of the to-be-deleted-element is NULL, the to-be-deleted-element is the last element in the list
+	else if (pToDelete->pNext == NULL)
+	{
+		Person *pTmp = pHead;
+
+		// Traverse to the specified element
+		while (pTmp->pNext != pToDelete)
+			pTmp = pTmp->pNext;
+
+		pTmp->pNext = NULL;
+	}
+	// The to-be-deleted-element is in the middle of the list
+	else
+	{
+		Person *pTmp = pHead;
+		
+		// Traverse to the specified element
+		while (pTmp->pNext != pToDelete)
+			pTmp = pTmp->pNext;
+
+		pTmp->pNext = pToDelete->pNext;
+	}
+
+	return pHead;
 }
