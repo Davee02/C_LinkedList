@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/LinkedList/LinkedList/BuildOutput/LinkedList.exe",
+            "program": "${workspaceFolder}/LinkedList/LinkedList/LinkedList.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

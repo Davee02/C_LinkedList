@@ -23,13 +23,14 @@ void Output(Person *pHead);
 int main(int argc, char *argv[])
 {
 	srand((unsigned)time(NULL));
-	Person *pHead = Create(1);
+	Person *pHead = NULL;
+
 	int command = 0;
 
 	DisplayMenu();
 	while (true)
 	{
-		printf("Please the command you want to execute(0-6, -1 to quit):\n");
+		printf("Please write the command you want to execute(0-6, -1 to quit):\n");
 		scanf("%d", &command);
 		fflush(stdin);
 		if (command == -1)
@@ -43,7 +44,7 @@ int main(int argc, char *argv[])
 
 		case 1:
 		{
-			printf("How many people do you want to create?");
+			printf("How many people do you want to create? ");
 			int numberOfElements = 0;
 			scanf("%d", &numberOfElements);
 			fflush(stdin);
@@ -53,34 +54,28 @@ int main(int argc, char *argv[])
 
 		case 2:
 		{
-			// Code here
+			// Delete List
 		}
 		break;
 
 		case 3:
 		{
-			// Code here
+			// Delete person by first- and lastname
 		}
 		break;
 
 		case 4:
 		{
-			// Code here
+			// Sort list
 		}
 		break;
 
 		case 5:
 		{
-			// Code here
+			Output(pHead);
 		}
 		break;
 
-		case 6:
-		{
-			// Code here
-		}
-		break;
-		
 		default:
 			DisplayMenu();
 			break;
@@ -100,7 +95,7 @@ void DisplayMenu()
 	printf("2) Delete whole list\n");
 	printf("3) Delete specific item\n");
 	printf("4) Sort list\n");
-	printf("6) Output the list\n");
+	printf("5) Output the list\n");
 	printf("-1) Quit program\n");
 	printf("------------------------------------------------------------------------\n");
 }
@@ -162,4 +157,9 @@ Person *Sort(Person *pHead)
 
 void Output(Person *pHead)
 {
+	int i = 1;
+	for (Person *pTmp = pHead; pTmp != nullptr; pTmp = pTmp->pNext, i++)
+	{
+		printf("Person #%i: %s %s (%i)\n", i, pTmp->Firstname, pTmp->Lastname, pTmp->Birthyear);
+	}
 }

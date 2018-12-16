@@ -6,7 +6,7 @@
         {
             "label": "build exe",
             "type": "shell",
-            "command": "g++ LinkedList/LinkedList/Source.cpp -o LinkedList/LinkedList/BuildOutput/LinkedList.exe -g"
+            "command": "g++ LinkedList/LinkedList/Source.cpp -o LinkedList/LinkedList/LinkedList.exe -g"
         }
     ]
 }
