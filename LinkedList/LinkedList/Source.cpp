@@ -21,6 +21,11 @@ Person *Remove(Person *pHead, char firstName[], char lastName[]);
 Person *Remove(Person *pHead, Person *pToDelete);
 Person *Sort(Person *pHead);
 void Output(Person *pHead);
+bool FirstPersonIsBigger(Person *p1, Person *p2);
+int GetLength(Person *pHead);
+Person *GetRandomPerson(Person *pHead);
+Person *GetLastElement(Person *pHead);
+Person *JoinLists(Person *pList1, Person *pPivot, Person *pList2);
 
 int main(int argc, char *argv[])
 {
@@ -97,8 +102,8 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-// Author: David
-// This function displays all the menu-points which can be used
+
+// Displays all the menu-points which can be used
 void DisplayMenu()
 {
 	printf("---------- LinkedList by David H. and Yannick F. ----------\n");
@@ -112,25 +117,25 @@ void DisplayMenu()
 	printf("------------------------------------------------------------------------\n");
 }
 
-// Author: David
-// This function returns a random uppercase character
+
+// Returns a random uppercase character
 char GetRandomCharacter()
 {
 	return GetRandomNumber('A', 'Z');
 }
 
-// Author: David
-// This function returns a random integer, which is between the under-bound and the upper-bound
+
+// Returns a random integer, which is between the under-bound and the upper-bound
 // The two bounds are inclusive
-int GetRandomNumber(int underBound, int upperBound)
+int GetRandomNumber(const int underBound, const int upperBound)
 {
 	return rand() % (upperBound + 1 - underBound) + underBound;
 }
 
-// Author: David
-// This function takes a integer as a parameter, which is for the number of the to be created elements
-// This function creates a new list of people with the provided count of elements
-Person *Create(int elementCount)
+
+// Takes a integer as a parameter, which is for the number of the to be created elements
+// Creates a new list of people with the provided count of elements
+Person *Create(const int elementCount)
 {
 	Person *pHead = NULL;
 
@@ -144,8 +149,8 @@ Person *Create(int elementCount)
 	return pHead;
 }
 
-// Author: David
-// This function creates a new person with a random birthyear, first- nad lastname
+
+// Creates a new person with a random birthyear, first- nad lastname
 Person *CreateNewPerson()
 {
 	Person *pNew = (Person *)malloc(sizeof(Person));
@@ -169,8 +174,8 @@ Person *CreateNewPerson()
 	return pNew;
 }
 
-// This function takes the pointer to first node of a linked-list and two strings as a parameter
-// This function deletes all people from the list and frees the memory
+// Takes the pointer to first node of a linked-list and two strings as a parameter
+// Deletes all people from the list and frees the memory
 Person *Dispose(Person *pHead)
 {
 	Person *pTmp = pHead;
@@ -185,8 +190,8 @@ Person *Dispose(Person *pHead)
 	return NULL;
 }
 
-// This function takes the pointer to first node of a linked-list and two strings as a parameter
-// This function removes all people with the provided first- and lastname from the list
+// Takes the pointer to first node of a linked-list and two strings as a parameter
+// Removes all people with the provided first- and lastname from the list
 Person *Remove(Person *pHead, char firstName[], char lastName[])
 {
 	if (firstName == NULL || lastName == NULL)
@@ -208,15 +213,78 @@ Person *Remove(Person *pHead, char firstName[], char lastName[])
 	return pHead;
 }
 
-// This function takes the pointer to first node of a linked-list as a parameter
-// This functions sorts the whole list by the fist- and then by the lastname
+// Takes the pointer to first node of a linked-list as a parameter
+// Sorts the whole list by the fist- and then by the lastname with the algorithm "quicksort"
+// The algorithm works like this:
+/* 
+1) If the list has 0 or 1 element, the list is sorted.
+2) Otherwise:
+	2.1) Choose a random element in the list (=pivot).
+	2.2) Split the list into three sub-lists: elements smaller than the pivot, elements equal to the pivot, and elements bigger than the pivot.
+	2.3) Sort the smaller- and bigger-sublist (begin at step 1)).
+	2.4) Merge the three lists to get a single, sorted list
+	
+Here's a short example with 5 elements:
+
+Unsorted: [5]→[7]→[1]→[9]→[3]
+The pivot is [7]
+Split the list into three sublists: [5]→[1]→[3] (smaller than pivot); [7] (pivot); [9] (bigger than pivot)
+	Sort the two sublists:
+	Sublist 1: [5]→[1]→[3]
+	The pivot is [5]
+	Split the list into three sublists: [1]→[3] (smaller than pivot); [5] (pivot); [] (bigger than pivot)
+		Sort the two sublists:
+		Sublist 1: [1]→[3]
+		The pivot is [1]
+		Split the list into three sublists: [] (smaller than pivot); [1] (pivot); [3] (bigger than pivot)
+			Sort the two sublists:
+			Sublist 1: []
+			List is 0 element big so the list is already sorted
+			Sublist 3: []
+			List is 1 element big so the list is already sorted
+			Because no list can be split more, merge the two lists with the pivot in the middle: [1]→[3]
+		Sublist 2: []
+		List is 0 element big so the list is already sorted
+		Because no list can be split more, merge the two lists with the pivot in the middle: [1]→[3]→[5]
+	Sublist 2: [9]
+	List is 1 element big so the list is already sorted
+	Because no list can be split more, merge the two lists with the pivot in the middle: [1]→[3]→[5]→[7]→[9]
+Sorted: [1]→[3]→[5]→[7]→[9]
+*/
 Person *Sort(Person *pHead)
 {
-	return NULL;
+	if (pHead == NULL || pHead->pNext == NULL)
+		return pHead; // The list is already sorted because there are 0 or 1 elements in it
+	Person *pTmp = pHead;
+
+	Person *pLeftSubList = NULL, *pRightSubList = NULL;
+	Person *pPivot = GetRandomPerson(pTmp);
+
+	for (Person *pCurrentElement = pTmp; pCurrentElement != NULL;)
+	{
+		Person *pNextElement = pCurrentElement->pNext;
+
+		if (pCurrentElement != pPivot)
+		{
+			if (FirstPersonIsBigger(pCurrentElement, pPivot))
+			{
+				pCurrentElement->pNext = pRightSubList;
+				pRightSubList = pCurrentElement;
+			}
+			else
+			{
+				pCurrentElement->pNext = pLeftSubList;
+				pLeftSubList = pCurrentElement;
+			}
+		}
+		pCurrentElement = pNextElement;
+	}
+
+	return JoinLists(Sort(pLeftSubList), pPivot, Sort(pRightSubList));
 }
 
-// This function takes the pointer to first node of a linked-list as a parameter
-// This function displays all people in the list.
+// Takes the pointer to first node of a linked-list as a parameter
+// Displays all people in the list.
 // Example: "Person #21: Max Muster"
 void Output(Person *pHead)
 {
@@ -227,8 +295,8 @@ void Output(Person *pHead)
 	}
 }
 
-// This function takes the pointer to first node of a linked-list and the pointer to the to be removed element as a parameter
-// This function removes the provided person from the list
+// Takes the pointer to first node of a linked-list and the pointer to the to be removed element as a parameter
+// Removes the provided person from the list
 Person *Remove(Person *pHead, Person *pToDelete)
 {
 	// If the start-point of the list is NULL, return NULL
@@ -271,4 +339,71 @@ Person *Remove(Person *pHead, Person *pToDelete)
 	}
 
 	return pHead;
+}
+
+
+bool FirstPersonIsBigger(Person *p1, Person *p2)
+{
+	if (p1->Firstname[0] > p2->Firstname[0])
+		return true;
+	if (p1->Firstname[0] < p2->Firstname[0])
+		return false;
+
+	if (p1->Lastname[0] > p2->Lastname[0])
+		return true;
+	if (p1->Lastname[0] < p2->Lastname[0])
+		return false;
+
+	return false;
+}
+
+// Returns the count of people in the linked list
+int GetLength(Person *pHead)
+{
+	int counter = 0;
+	for (Person *pTmp = pHead; pTmp != NULL; pTmp = pTmp->pNext)
+	{
+		++counter;
+	}
+	return counter;
+}
+
+// Returns a random person in the linked list
+Person *GetRandomPerson(Person *pHead)
+{
+	int listLength = GetLength(pHead);
+	int personIndex = GetRandomNumber(0, listLength - 1);
+
+	Person *pTmp = pHead;
+	for (int currentIndex = 0; currentIndex < personIndex; currentIndex++)
+	{
+		pTmp = pTmp->pNext;
+	}
+
+	return pTmp;
+}
+
+// Returns the last element in the linked list
+Person *GetLastElement(Person *pHead)
+{
+	Person *pTmp = NULL;
+	for (pTmp = pHead; pTmp->pNext != NULL; pTmp = pTmp->pNext)
+		;
+
+	return pTmp;
+}
+
+Person *JoinLists(Person *pList1, Person *pPivot, Person *pList2)
+{
+	pPivot->pNext = pList2;
+
+	if (pList1 == NULL)
+	{
+		return pPivot;
+	}
+
+	Person *pList1LastElement = GetLastElement(pList1);
+	pList1LastElement->pNext = pPivot;
+
+	return pList1;
 }
