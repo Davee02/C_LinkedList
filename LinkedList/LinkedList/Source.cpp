@@ -82,7 +82,12 @@ int main(int argc, char *argv[])
 
 		case 4:
 		{
+			clock_t startTime = clock();
 			pHead = Sort(pHead);
+			clock_t endTime = clock();
+
+			double timeSpent = (double)(endTime - startTime) / CLOCKS_PER_SEC;
+			printf("Quicksort took %f seconds\n", timeSpent);
 		}
 		break;
 
@@ -197,7 +202,7 @@ Person *Remove(Person *pHead, char firstName[], char lastName[])
 	if (firstName == NULL || lastName == NULL)
 		return pHead;
 
-	int deleteCounter;
+	int deleteCounter = 0;
 	for (Person *pTmp = pHead; pTmp != NULL; pTmp = pTmp->pNext)
 	{
 		if (strcmp(firstName, pTmp->Firstname) == 0 &&
