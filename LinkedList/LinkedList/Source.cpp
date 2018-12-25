@@ -16,12 +16,12 @@ char GetRandomCharacter();
 int GetRandomNumber(int underBound, int upperBound);
 Person *Create(int elementCount);
 Person *CreateNewPerson();
-Person *Dispose(Person *pHead);
+void Dispose(Person *pHead);
 Person *Remove(Person *pHead, char firstName[], char lastName[]);
 Person *Remove(Person *pHead, Person *pToDelete);
-Person *Sort(Person *pHead);
+Person *Quicksort(Person *pHead);
 void Output(Person *pHead);
-bool FirstPersonIsBigger(Person *p1, Person *p2);
+bool IsFirstPersonBigger(Person *p1, Person *p2);
 int GetLength(Person *pHead);
 Person *GetRandomPerson(Person *pHead);
 Person *GetLastElement(Person *pHead);
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
 		case 2:
 		{
-			pHead = Dispose(pHead);
+			Dispose(pHead);
 		}
 		break;
 
@@ -82,12 +82,23 @@ int main(int argc, char *argv[])
 
 		case 4:
 		{
+			printf("Which sorting-algorithm do you want to use? [q]uicksort or [o]ther? ");
+			char answer;
+			scanf("%c", &answer);
+
 			clock_t startTime = clock();
-			pHead = Sort(pHead);
+			if (answer == 'q')
+			{
+				pHead = Quicksort(pHead);
+			}
+			else
+			{
+
+			}
 			clock_t endTime = clock();
 
 			double timeSpent = (double)(endTime - startTime) / CLOCKS_PER_SEC;
-			printf("Quicksort took %f seconds\n", timeSpent);
+			printf("Sorting took %f seconds\n", timeSpent);
 		}
 		break;
 
@@ -107,7 +118,6 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-
 // Displays all the menu-points which can be used
 void DisplayMenu()
 {
@@ -122,13 +132,11 @@ void DisplayMenu()
 	printf("------------------------------------------------------------------------\n");
 }
 
-
 // Returns a random uppercase character
 char GetRandomCharacter()
 {
 	return GetRandomNumber('A', 'Z');
 }
-
 
 // Returns a random integer, which is between the under-bound and the upper-bound
 // The two bounds are inclusive
@@ -136,7 +144,6 @@ int GetRandomNumber(const int underBound, const int upperBound)
 {
 	return rand() % (upperBound + 1 - underBound) + underBound;
 }
-
 
 // Takes a integer as a parameter, which is for the number of the to be created elements
 // Creates a new list of people with the provided count of elements
@@ -153,7 +160,6 @@ Person *Create(const int elementCount)
 
 	return pHead;
 }
-
 
 // Creates a new person with a random birthyear, first- nad lastname
 Person *CreateNewPerson()
@@ -181,7 +187,7 @@ Person *CreateNewPerson()
 
 // Takes the pointer to first node of a linked-list and two strings as a parameter
 // Deletes all people from the list and frees the memory
-Person *Dispose(Person *pHead)
+void Dispose(Person *pHead)
 {
 	Person *pTmp = pHead;
 
@@ -191,8 +197,6 @@ Person *Dispose(Person *pHead)
 		pTmp = pTmp->pNext;
 		free(pNextElement);
 	}
-
-	return NULL;
 }
 
 // Takes the pointer to first node of a linked-list and two strings as a parameter
@@ -256,7 +260,7 @@ Split the list into three sublists: [5]→[1]→[3] (smaller than pivot); [7] (p
 	Because no list can be split more, merge the two lists with the pivot in the middle: [1]→[3]→[5]→[7]→[9]
 Sorted: [1]→[3]→[5]→[7]→[9]
 */
-Person *Sort(Person *pHead)
+Person *Quicksort(Person *pHead)
 {
 	if (pHead == NULL || pHead->pNext == NULL)
 		return pHead; // The list is already sorted because there are 0 or 1 elements in it
@@ -271,7 +275,7 @@ Person *Sort(Person *pHead)
 
 		if (pCurrentElement != pPivot)
 		{
-			if (FirstPersonIsBigger(pCurrentElement, pPivot))
+			if (IsFirstPersonBigger(pCurrentElement, pPivot))
 			{
 				pCurrentElement->pNext = pRightSubList;
 				pRightSubList = pCurrentElement;
@@ -285,7 +289,7 @@ Person *Sort(Person *pHead)
 		pCurrentElement = pNextElement;
 	}
 
-	return JoinLists(Sort(pLeftSubList), pPivot, Sort(pRightSubList));
+	return JoinLists(Quicksort(pLeftSubList), pPivot, Quicksort(pRightSubList));
 }
 
 // Takes the pointer to first node of a linked-list as a parameter
@@ -347,7 +351,7 @@ Person *Remove(Person *pHead, Person *pToDelete)
 }
 
 
-bool FirstPersonIsBigger(Person *p1, Person *p2)
+bool IsFirstPersonBigger(Person *p1, Person *p2)
 {
 	if (p1->Firstname[0] > p2->Firstname[0])
 		return true;
@@ -398,6 +402,9 @@ Person *GetLastElement(Person *pHead)
 	return pTmp;
 }
 
+// This is a utility-function for the quicksort-algorithm.
+// It joins the left list, the pivot and the right list to one list
+// The order is the following: [Head left list]→[...]→[Tail left list]→[Head pivot]→[...]→[Tail pivot]→[Head right list]→[...]→[Tail right list]
 Person *JoinLists(Person *pList1, Person *pPivot, Person *pList2)
 {
 	pPivot->pNext = pList2;
