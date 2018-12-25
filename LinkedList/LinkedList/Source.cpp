@@ -121,7 +121,9 @@ int main(int argc, char *argv[])
 // Displays all the menu-points which can be used
 void DisplayMenu()
 {
-	printf("---------- LinkedList by David H. and Yannick F. ----------\n");
+	printf("___________________________________________________________________________\n");
+	printf("------------------ LinkedList by David H. and Yannick F. ------------------\n");
+	printf("___________________________________________________________________________\n\n");
 	printf("0) Display the menu\n");
 	printf("1) Create new list\n");
 	printf("2) Delete whole list\n");
@@ -129,7 +131,7 @@ void DisplayMenu()
 	printf("4) Sort list\n");
 	printf("5) Output the list\n");
 	printf("-1) Quit program\n");
-	printf("------------------------------------------------------------------------\n");
+	printf("___________________________________________________________________________\n\n");
 }
 
 // Returns a random uppercase character
