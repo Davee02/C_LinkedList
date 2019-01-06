@@ -20,6 +20,8 @@ void Dispose(Person *pHead);
 Person *Remove(Person *pHead, char firstName[], char lastName[]);
 Person *Remove(Person *pHead, Person *pToDelete);
 Person *Quicksort(Person *pHead);
+Person *Sort(Person *pHead);
+void Swap(Person *p1, Person *p2);
 void Output(Person *pHead);
 bool IsFirstPersonBigger(Person *p1, Person *p2);
 int GetLength(Person *pHead);
@@ -93,7 +95,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-
+				pHead = Sort(pHead);
 			}
 			clock_t endTime = clock();
 
@@ -225,7 +227,7 @@ Person *Remove(Person *pHead, char firstName[], char lastName[])
 }
 
 // Takes the pointer to first node of a linked-list as a parameter
-// Sorts the whole list by the fist- and then by the lastname with the algorithm "quicksort"
+// Sorts the whole list by the first- and then by the lastname with the algorithm "quicksort"
 // The algorithm works like this:
 /* 
 1) If the list has 0 or 1 element, the list is sorted.
@@ -292,6 +294,138 @@ Person *Quicksort(Person *pHead)
 	}
 
 	return JoinLists(Quicksort(pLeftSubList), pPivot, Quicksort(pRightSubList));
+}
+
+// Takes the pointer to first node of a linked-list as a parameter
+// Sorts the whole list by the first- and then by the lastname with the algorithm "bubblesort"
+// The algorithm works like this:
+
+/*
+1) If the list has 0 or 1 element, the list is sorted.
+2) Otherwise:
+	2.1) Compares current element with the next element
+	2.2) if the first element is bigger the date between both gets swapped
+	2.3) current elements gets set to next element
+	2.4) those steps repeat until no no swaps were made
+
+Here's a short example with 5 elements:
+
+Unsorted: [5]→[7]→[1]→[9]→[3]
+
+current element: [5]
+	[5] is smaller than [7] -> nothing happens
+
+current element: [7]
+	[7] is bigger than [1] -> [7] and [1] swaps
+
+new order: [5]→[1]→[7]→[9]→[3]
+
+current element: [7]
+	[7] is smaller than [9] -> nothing happens
+
+current element: [9]
+	[9] is bigger than [3] -> [9] and [3] swaps
+
+new order: [5]→[1]→[7]→[3]→[9]
+
+repeat(swapped == true):
+
+current element: [5]
+	[5] is bigger than [1] -> [5] and [1] swaps
+
+new order: [1]→[5]→[7]→[3]→[9]
+
+current element: [5]
+	[5] is smaller than [7] -> nothing happens
+
+current element: [7]
+	[7] is bigger than [3] -> [7] and [3] swaps
+
+new order: [1]→[5]→[3]→[7]→[9]
+
+current element: [7]
+	[7] is smaller than [9] -> nothing happens
+
+repeat(swapped == true):
+
+current element: [1]
+	[1] is smaller than [5] -> nothing happens
+
+current element: [5]
+	[5] is bigger than [3] -> [5] and [3] swaps
+
+new order: [1]→[3]→[5]→[7]→[9]
+
+current element: [5]
+	[5] is smaller than [7] -> nothing happens
+
+current element: [7]
+	[7] is smaller than [9] -> nothing happens
+
+repeat(swapped == true):
+
+current element: [1]
+	[1] is smaller than [3] -> nothing happens
+
+current element: [3]
+	[3] is smaller than [5] -> nothing happens
+
+current element: [5]
+	[5] is smaller than [7] -> nothing happens
+
+current element: [7]
+	[7] is smaller than [9] -> nothing happens
+
+no repeat(swapped == false)
+*/
+Person *Bubblesort(Person *head)
+{
+	int swapped;
+
+	Person *pCurrentElement = head;
+
+	if (pCurrentElement == NULL)
+	{
+		return head;
+	}
+
+	do
+	{
+		swapped = 0;
+		pCurrentElement = head;
+
+		while (pCurrentElement->pNext != NULL)
+		{
+			if (IsFirstPersonBigger(pCurrentElement, pCurrentElement->pNext))
+			{
+				Swap(pCurrentElement, pCurrentElement->pNext);
+				swapped = 1;
+			}
+
+			pCurrentElement = pCurrentElement->pNext;
+		}		
+	}
+	while (swapped);
+
+	return head;
+}
+
+//Swaps the data between two Elements
+void Swap(Person *p1, Person *p2)
+{
+	char tmpFirstname[40];
+	char tmpLastname[40];
+	strcpy_s(tmpFirstname, p1->Firstname);
+	strcpy_s(tmpLastname, p1->Lastname);
+	int tmpBirthyear = p1->Birthyear;
+	
+	strcpy_s(p1->Firstname, p2->Firstname);
+	strcpy_s(p1->Lastname, p2->Lastname);
+	p1->Birthyear = p2->Birthyear;
+
+	strcpy_s(p2->Firstname, tmpFirstname);
+	strcpy_s(p2->Lastname, tmpLastname);
+	p2->Birthyear = tmpBirthyear;
 }
 
 // Takes the pointer to first node of a linked-list as a parameter
