@@ -20,7 +20,7 @@ void Dispose(Person *pHead);
 Person *Remove(Person *pHead, char firstName[], char lastName[]);
 Person *Remove(Person *pHead, Person *pToDelete);
 Person *Quicksort(Person *pHead);
-Person *Sort(Person *pHead);
+Person *Bubblesort(Person *pHead);
 void Swap(Person *p1, Person *p2);
 void Output(Person *pHead);
 bool IsFirstPersonBigger(Person *p1, Person *p2);
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
 		case 4:
 		{
-			printf("Which sorting-algorithm do you want to use? [q]uicksort or [o]ther? ");
+			printf("Which sorting-algorithm do you want to use? [q]uicksort or [b]ubblesort? ");
 			char answer;
 			scanf("%c", &answer);
 
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				pHead = Sort(pHead);
+				pHead = Bubblesort(pHead);
 			}
 			clock_t endTime = clock();
 
