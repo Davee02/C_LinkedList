@@ -494,12 +494,12 @@ bool IsFirstPersonBigger(Person *p1, Person *p2)
 {
 	if (strcmp(p1->Firstname, p2->Firstname) > 0)
 		return true;
-	if (strcmp(p1->Firstname, p2->Firstname) > 0)
+	if (strcmp(p1->Firstname, p2->Firstname) < 0)
 		return false;
 
 	if (strcmp(p1->Lastname, p2->Lastname) > 0)
 		return true;
-	if (strcmp(p1->Lastname, p2->Lastname) > 0)
+	if (strcmp(p1->Lastname, p2->Lastname) < 0)
 		return false;
 
 	return false;
