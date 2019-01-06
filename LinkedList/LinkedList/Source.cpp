@@ -281,11 +281,13 @@ Person *Quicksort(Person *pHead)
 		{
 			if (IsFirstPersonBigger(pCurrentElement, pPivot))
 			{
+				// Current element is bigger than the pivot so its added to the "bigger"-SubList
 				pCurrentElement->pNext = pRightSubList;
 				pRightSubList = pCurrentElement;
 			}
 			else
 			{
+				// Current element is smaller or equal sized as the pivot so its added to the "smaller"-SubList
 				pCurrentElement->pNext = pLeftSubList;
 				pLeftSubList = pCurrentElement;
 			}
@@ -293,6 +295,7 @@ Person *Quicksort(Person *pHead)
 		pCurrentElement = pNextElement;
 	}
 
+	// Merge the three parts to a single list
 	return JoinLists(Quicksort(pLeftSubList), pPivot, Quicksort(pRightSubList));
 }
 
@@ -489,14 +492,14 @@ Person *Remove(Person *pHead, Person *pToDelete)
 
 bool IsFirstPersonBigger(Person *p1, Person *p2)
 {
-	if (p1->Firstname[0] > p2->Firstname[0])
+	if (strcmp(p1->Firstname, p2->Firstname) > 0)
 		return true;
-	if (p1->Firstname[0] < p2->Firstname[0])
+	if (strcmp(p1->Firstname, p2->Firstname) > 0)
 		return false;
 
-	if (p1->Lastname[0] > p2->Lastname[0])
+	if (strcmp(p1->Lastname, p2->Lastname) > 0)
 		return true;
-	if (p1->Lastname[0] < p2->Lastname[0])
+	if (strcmp(p1->Lastname, p2->Lastname) > 0)
 		return false;
 
 	return false;
