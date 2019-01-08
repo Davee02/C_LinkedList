@@ -21,7 +21,6 @@ Person *Remove(Person *pHead, char firstName[], char lastName[]);
 Person *Remove(Person *pHead, Person *pToDelete);
 Person *Quicksort(Person *pHead);
 Person *Bubblesort(Person *pHead);
-void Swap(Person *p1, Person *p2);
 void Output(Person *pHead);
 bool IsFirstPersonBigger(Person *p1, Person *p2);
 int GetLength(Person *pHead);
@@ -299,6 +298,7 @@ Person *Quicksort(Person *pHead)
 	return JoinLists(Quicksort(pLeftSubList), pPivot, Quicksort(pRightSubList));
 }
 
+
 // Takes the pointer to first node of a linked-list as a parameter
 // Sorts the whole list by the first- and then by the lastname with the algorithm "bubblesort"
 // The algorithm works like this:
@@ -392,6 +392,7 @@ Person *Bubblesort(Person *head)
 		return head;
 	}
 
+	Person *pPreviousElement = NULL;
 	do
 	{
 		swapped = 0;
@@ -401,34 +402,28 @@ Person *Bubblesort(Person *head)
 		{
 			if (IsFirstPersonBigger(pCurrentElement, pCurrentElement->pNext))
 			{
-				Swap(pCurrentElement, pCurrentElement->pNext);
+				// Swap the nodes pPreviousElement and pCurrentElement
+				Person *pTmp = pCurrentElement->pNext;
+				pCurrentElement->pNext = pCurrentElement->pNext->pNext;
+				pTmp->pNext = pCurrentElement;
+
+				if (head == pCurrentElement)
+					head = pPreviousElement = pTmp;
+				else
+				{
+					pPreviousElement->pNext = pTmp;
+					pCurrentElement = pTmp;
+				}
+
 				swapped = 1;
 			}
 
+			pPreviousElement = pCurrentElement;
 			pCurrentElement = pCurrentElement->pNext;
-		}		
-	}
-	while (swapped);
+		}
+	} while (swapped);
 
 	return head;
-}
-
-//Swaps the data between two Elements
-void Swap(Person *p1, Person *p2)
-{
-	char tmpFirstname[40];
-	char tmpLastname[40];
-	strcpy_s(tmpFirstname, p1->Firstname);
-	strcpy_s(tmpLastname, p1->Lastname);
-	int tmpBirthyear = p1->Birthyear;
-	
-	strcpy_s(p1->Firstname, p2->Firstname);
-	strcpy_s(p1->Lastname, p2->Lastname);
-	p1->Birthyear = p2->Birthyear;
-
-	strcpy_s(p2->Firstname, tmpFirstname);
-	strcpy_s(p2->Lastname, tmpLastname);
-	p2->Birthyear = tmpBirthyear;
 }
 
 // Takes the pointer to first node of a linked-list as a parameter
@@ -489,7 +484,8 @@ Person *Remove(Person *pHead, Person *pToDelete)
 	return pHead;
 }
 
-
+// Checks, if the first person should be after the second one in a sorted list
+// Firstly, it checks the firstname and secondly the lastname
 bool IsFirstPersonBigger(Person *p1, Person *p2)
 {
 	if (strcmp(p1->Firstname, p2->Firstname) > 0)
@@ -499,7 +495,7 @@ bool IsFirstPersonBigger(Person *p1, Person *p2)
 
 	if (strcmp(p1->Lastname, p2->Lastname) > 0)
 		return true;
-	if (strcmp(p1->Lastname, p2->Lastname) < 0)
+	if (strcmp(p1->Lastname, p2->Lastname) > 0)
 		return false;
 
 	return false;
