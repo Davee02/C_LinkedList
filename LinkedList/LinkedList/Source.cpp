@@ -37,6 +37,7 @@ Person *GetRandomPerson(Person *pHead);
 Person *GetLastElement(Person *pHead);
 Person *JoinLists(Person *pList1, Person *pPivot, Person *pList2);
 
+// Author: David & Yannick
 int main(int argc, char *argv[])
 {
 	// Initialize the pseudo-random number-generator and use the current time since midnight in milliseconds as the seed
@@ -95,13 +96,13 @@ int main(int argc, char *argv[])
 		{
 			printf("Which sorting-algorithm do you want to use? [q]uicksort or [b]ubblesort? ");
 			char typeAnswer;
-			scanf("%c", &typeAnswer);
+			scanf(" %c", &typeAnswer);
 
 			fflush(stdin);
 
-			printf("Do you want sort by [f]irst- and then lastname or by the [b]irthyear? The default is by the names.	");
-			char sortAnswer;
-			scanf("%c", &sortAnswer);
+			printf("Do you want sort by [f]irst- and then lastname or by the [b]irthyear? Default is by the names.	");
+			char sortAnswer; 
+			scanf(" %c", &sortAnswer);
 			SortStyle sortStyle;
 			if(sortAnswer == 'b')
 				sortStyle = SortByYear;
@@ -145,6 +146,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+// Author: David & Yannick
 // Displays all the menu-points which can be used
 void DisplayMenu()
 {
@@ -161,12 +163,14 @@ void DisplayMenu()
 	printf("___________________________________________________________________________\n\n");
 }
 
+// Author: David & Yannick
 // Returns a random uppercase character
 char GetRandomCharacter()
 {
 	return GetRandomNumber('A', 'Z');
 }
 
+// Author: David & Yannick
 // Returns a random integer, which is between the under-bound and the upper-bound
 // The two bounds are inclusive
 int GetRandomNumber(const int underBound, const int upperBound)
@@ -174,6 +178,7 @@ int GetRandomNumber(const int underBound, const int upperBound)
 	return rand() % (upperBound + 1 - underBound) + underBound;
 }
 
+// Author: David & Yannick
 // Takes a integer as a parameter, which is for the number of the to be created elements
 // Creates a new list of people with the provided count of elements
 Person *Create(const int elementCount)
@@ -190,6 +195,7 @@ Person *Create(const int elementCount)
 	return pHead;
 }
 
+// Author: David & Yannick
 // Creates a new person with a random birthyear, first- nad lastname
 Person *CreateNewPerson()
 {
@@ -214,6 +220,7 @@ Person *CreateNewPerson()
 	return pNew;
 }
 
+// Author: David & Yannick
 // Takes the pointer to first node of a linked-list and two strings as a parameter
 // Deletes all people from the list and frees the memory
 void Dispose(Person *pHead)
@@ -228,6 +235,7 @@ void Dispose(Person *pHead)
 	}
 }
 
+// Author: David & Yannick
 // Takes the pointer to first node of a linked-list and two strings as a parameter
 // Removes all people with the provided first- and lastname from the list
 Person *Remove(Person *pHead, char firstName[], char lastName[])
@@ -251,6 +259,7 @@ Person *Remove(Person *pHead, char firstName[], char lastName[])
 	return pHead;
 }
 
+// Author: David
 // Takes the pointer to first node of a linked-list as a parameter
 // Sorts the whole list by the first- and then by the lastname with the algorithm "quicksort"
 // The algorithm works like this:
@@ -324,6 +333,7 @@ Person *Quicksort(Person *pHead, SortStyle sortStyle)
 	return JoinLists(Quicksort(pLeftSubList, sortStyle), pPivot, Quicksort(pRightSubList, sortStyle));
 }
 
+// Author: Yannick
 // Takes the pointer to first node of a linked-list as a parameter
 // Sorts the whole list by the first- and then by the lastname with the algorithm "bubblesort"
 // The algorithm works like this:
@@ -451,6 +461,7 @@ Person *Bubblesort(Person *head, SortStyle sortStyle)
 	return head;
 }
 
+// Author: David & Yannick
 // Takes the pointer to first node of a linked-list as a parameter
 // Displays all people in the list.
 // Example: "Person #21: Max Muster"
@@ -463,6 +474,7 @@ void Output(Person *pHead)
 	}
 }
 
+// Author: David & Yannick
 // Takes the pointer to first node of a linked-list and the pointer to the to be removed element as a parameter
 // Removes the provided person from the list
 Person *Remove(Person *pHead, Person *pToDelete)
@@ -509,6 +521,7 @@ Person *Remove(Person *pHead, Person *pToDelete)
 	return pHead;
 }
 
+// Author: David & Yannick
 // Checks, if the first person should be after the second one in a sorted list
 // Firstly, it checks the firstname and secondly the lastname
 int IsFirstPersonBigger(Person *p1, Person *p2, SortStyle sortStyle)
@@ -538,6 +551,7 @@ int IsFirstPersonBigger(Person *p1, Person *p2, SortStyle sortStyle)
 	return FALSE;
 }
 
+// Author: David & Yannick
 // Returns the count of people in the linked list
 int GetLength(Person *pHead)
 {
@@ -549,6 +563,7 @@ int GetLength(Person *pHead)
 	return counter;
 }
 
+// Author: David & Yannick
 // Returns a random person in the linked list
 Person *GetRandomPerson(Person *pHead)
 {
@@ -564,6 +579,7 @@ Person *GetRandomPerson(Person *pHead)
 	return pTmp;
 }
 
+// Author: David & Yannick
 // Returns the last element in the linked list
 Person *GetLastElement(Person *pHead)
 {
@@ -574,6 +590,7 @@ Person *GetLastElement(Person *pHead)
 	return pTmp;
 }
 
+// Author: David & Yannick
 // This is a utility-function for the quicksort-algorithm.
 // It joins the left list, the pivot and the right list to one list
 // The order is the following: [Head left list]→[...]→[Tail left list]→[Head pivot]→[...]→[Tail pivot]→[Head right list]→[...]→[Tail right list]
