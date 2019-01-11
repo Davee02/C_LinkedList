@@ -3,6 +3,9 @@
 #include "time.h"
 #include "string.h"
 
+#define FALSE 0
+#define TRUE !FALSE
+
 typedef struct Person
 {
 	char Firstname[40];
@@ -10,6 +13,12 @@ typedef struct Person
 	int Birthyear;
 	struct Person *pNext;
 } Person;
+
+typedef enum SortStyle
+{
+	SortByYear = 0,
+	SortByNames = 1
+} SortStyle;
 
 void DisplayMenu();
 char GetRandomCharacter();
@@ -19,10 +28,10 @@ Person *CreateNewPerson();
 void Dispose(Person *pHead);
 Person *Remove(Person *pHead, char firstName[], char lastName[]);
 Person *Remove(Person *pHead, Person *pToDelete);
-Person *Quicksort(Person *pHead);
-Person *Bubblesort(Person *pHead);
+Person *Quicksort(Person *pHead, SortStyle sortStyle);
+Person *Bubblesort(Person *pHead, SortStyle sortStyle);
 void Output(Person *pHead);
-bool IsFirstPersonBigger(Person *p1, Person *p2);
+int IsFirstPersonBigger(Person *p1, Person *p2, SortStyle sortStyle);
 int GetLength(Person *pHead);
 Person *GetRandomPerson(Person *pHead);
 Person *GetLastElement(Person *pHead);
@@ -37,12 +46,13 @@ int main(int argc, char *argv[])
 	int command = 0;
 
 	DisplayMenu();
-	while (true)
+	while (TRUE)
 	{
 		printf("Please write the command you want to execute(0-6, -1 to quit):\n");
 		scanf("%d", &command);
 		fgetchar();
 		if (command == -1)
+			// Exit the program
 			break;
 
 		switch (command)
@@ -84,17 +94,33 @@ int main(int argc, char *argv[])
 		case 4:
 		{
 			printf("Which sorting-algorithm do you want to use? [q]uicksort or [b]ubblesort? ");
-			char answer;
-			scanf("%c", &answer);
+			char typeAnswer;
+			scanf("%c", &typeAnswer);
+
+			fflush(stdin);
+
+			printf("Do you want sort by [f]irst- and then lastname or by the [b]irthyear? The default is by the names.	");
+			char sortAnswer;
+			scanf("%c", &sortAnswer);
+			SortStyle sortStyle;
+			if(sortAnswer == 'b')
+				sortStyle = SortByYear;
+			else
+				sortStyle = SortByNames;
+
 
 			clock_t startTime = clock();
-			if (answer == 'q')
+			if (typeAnswer == 'q')
 			{
-				pHead = Quicksort(pHead);
+				pHead = Quicksort(pHead, sortStyle);
+			}
+			else if(typeAnswer == 'b')
+			{
+				pHead = Bubblesort(pHead, sortStyle);
 			}
 			else
 			{
-				pHead = Bubblesort(pHead);
+				printf("Please enter a valid sort-type!");
 			}
 			clock_t endTime = clock();
 
@@ -263,7 +289,7 @@ Split the list into three sublists: [5]→[1]→[3] (smaller than pivot); [7] (p
 	Because no list can be split more, merge the two lists with the pivot in the middle: [1]→[3]→[5]→[7]→[9]
 Sorted: [1]→[3]→[5]→[7]→[9]
 */
-Person *Quicksort(Person *pHead)
+Person *Quicksort(Person *pHead, SortStyle sortStyle)
 {
 	if (pHead == NULL || pHead->pNext == NULL)
 		return pHead; // The list is already sorted because there are 0 or 1 elements in it
@@ -278,7 +304,7 @@ Person *Quicksort(Person *pHead)
 
 		if (pCurrentElement != pPivot)
 		{
-			if (IsFirstPersonBigger(pCurrentElement, pPivot))
+			if (IsFirstPersonBigger(pCurrentElement, pPivot, sortStyle))
 			{
 				// Current element is bigger than the pivot so its added to the "bigger"-SubList
 				pCurrentElement->pNext = pRightSubList;
@@ -295,9 +321,8 @@ Person *Quicksort(Person *pHead)
 	}
 
 	// Merge the three parts to a single list
-	return JoinLists(Quicksort(pLeftSubList), pPivot, Quicksort(pRightSubList));
+	return JoinLists(Quicksort(pLeftSubList, sortStyle), pPivot, Quicksort(pRightSubList, sortStyle));
 }
-
 
 // Takes the pointer to first node of a linked-list as a parameter
 // Sorts the whole list by the first- and then by the lastname with the algorithm "bubblesort"
@@ -381,7 +406,7 @@ current element: [7]
 
 no repeat(swapped == false)
 */
-Person *Bubblesort(Person *head)
+Person *Bubblesort(Person *head, SortStyle sortStyle)
 {
 	int swapped;
 
@@ -395,12 +420,12 @@ Person *Bubblesort(Person *head)
 	Person *pPreviousElement = NULL;
 	do
 	{
-		swapped = 0;
+		swapped = FALSE;
 		pCurrentElement = head;
 
 		while (pCurrentElement->pNext != NULL)
 		{
-			if (IsFirstPersonBigger(pCurrentElement, pCurrentElement->pNext))
+			if (IsFirstPersonBigger(pCurrentElement, pCurrentElement->pNext, sortStyle))
 			{
 				// Swap the nodes pPreviousElement and pCurrentElement
 				Person *pTmp = pCurrentElement->pNext;
@@ -415,7 +440,7 @@ Person *Bubblesort(Person *head)
 					pCurrentElement = pTmp;
 				}
 
-				swapped = 1;
+				swapped = TRUE;
 			}
 
 			pPreviousElement = pCurrentElement;
@@ -486,19 +511,31 @@ Person *Remove(Person *pHead, Person *pToDelete)
 
 // Checks, if the first person should be after the second one in a sorted list
 // Firstly, it checks the firstname and secondly the lastname
-bool IsFirstPersonBigger(Person *p1, Person *p2)
+int IsFirstPersonBigger(Person *p1, Person *p2, SortStyle sortStyle)
 {
-	if (strcmp(p1->Firstname, p2->Firstname) > 0)
-		return true;
-	if (strcmp(p1->Firstname, p2->Firstname) < 0)
-		return false;
+	if (sortStyle == SortByNames)
+	{
+		if (strcmp(p1->Firstname, p2->Firstname) > 0)
+			return TRUE;
+		if (strcmp(p1->Firstname, p2->Firstname) < 0)
+			return FALSE;
 
-	if (strcmp(p1->Lastname, p2->Lastname) > 0)
-		return true;
-	if (strcmp(p1->Lastname, p2->Lastname) > 0)
-		return false;
+		if (strcmp(p1->Lastname, p2->Lastname) > 0)
+			return TRUE;
+		if (strcmp(p1->Lastname, p2->Lastname) > 0)
+			return FALSE;
 
-	return false;
+		return FALSE;
+	}
+	else if(sortStyle == SortByYear)
+	{
+		if(p1->Birthyear > p2->Birthyear)
+			return TRUE;
+		
+		return FALSE;
+	}
+
+	return FALSE;
 }
 
 // Returns the count of people in the linked list
